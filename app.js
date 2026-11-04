@@ -10,7 +10,7 @@
      padrão: última terça do mês, às 20h.
      ========================================================= */
   const CONFIG = {
-    EDICOES: ['2026-11-24T20:00:00-03:00'],
+    EDICOES: ['2026-12-10T20:00:00-03:00'],
     REGRA_PADRAO: { diaDaSemana: 2 /* 0=dom, 2=terça */, hora: 20 },
     DURACAO_MIN: 90,
     TITULO_AGENDA: 'Consultor dos Milhões · Aula ao vivo com Gabriel Liberato',
