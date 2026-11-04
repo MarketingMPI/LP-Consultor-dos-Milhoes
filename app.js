@@ -2,18 +2,11 @@
 (() => {
   'use strict';
 
-  /* =========================================================
-     CONFIGURAÇÃO DA EDIÇÃO (o único bloco que muda todo mês)
-     ---------------------------------------------------------
-     EDICOES: datas confirmadas, horário de Brasília (-03:00).
-     Quando todas passarem, a página assume sozinha a regra
-     padrão: última terça do mês, às 20h.
-     ========================================================= */
+  /* A DATA DA EDIÇÃO fica em edicao.js (o único arquivo que muda todo mês). */
+  const ME = window.MP_EDICAO;
   const CONFIG = {
-    EDICOES: ['2026-12-10T20:00:00-03:00'],
-    REGRA_PADRAO: { diaDaSemana: 2 /* 0=dom, 2=terça */, hora: 20 },
-    DURACAO_MIN: 90,
-    TITULO_AGENDA: 'Consultor dos Milhões · Aula ao vivo com Gabriel Liberato',
+    DURACAO_MIN: ME.DURACAO_MIN,
+    TITULO_AGENDA: ME.TITULO,
 
     /* Formulário ActiveCampaign. Enquanto formId = null, a página
        roda em MODO PRÉVIA: mostra a confirmação, mas não envia o lead. */
@@ -30,25 +23,7 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 
   /* ---------- Data da edição ---------- */
-  function regraPadrao(from) {
-    // última <diaDaSemana> do mês, às <hora>h de Brasília
-    const { diaDaSemana, hora } = CONFIG.REGRA_PADRAO;
-    for (let add = 0; add < 3; add++) {
-      const y = from.getUTCFullYear(), m = from.getUTCMonth() + add;
-      const last = new Date(Date.UTC(y, m + 1, 0)); // último dia do mês
-      const back = (last.getUTCDay() - diaDaSemana + 7) % 7;
-      const day = last.getUTCDate() - back;
-      const d = new Date(Date.UTC(y, m, day, hora + 3, 0, 0)); // BRT = UTC-3
-      if (d.getTime() + CONFIG.DURACAO_MIN * 60000 > from.getTime()) return d;
-    }
-  }
-  function proximaEdicao() {
-    const now = new Date();
-    const fim = d => d.getTime() + CONFIG.DURACAO_MIN * 60000;
-    const prox = CONFIG.EDICOES.map(s => new Date(s)).sort((a, b) => a - b).find(d => fim(d) > now.getTime());
-    return prox || regraPadrao(now);
-  }
-  const ED = proximaEdicao();
+  const ED = ME.proxima();
 
   const fmt = (opts) => new Intl.DateTimeFormat('pt-BR', { timeZone: TZ, ...opts }).format(ED);
   const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
@@ -415,8 +390,7 @@
   const fim = new Date(ED.getTime() + CONFIG.DURACAO_MIN * 60000);
   const z = d => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
   const desc = 'Aula ao vivo e gratuita com Gabriel Liberato. O link da sala chega por e-mail e WhatsApp no dia do encontro.';
-  $('[data-cal="google"]').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
-    + `&text=${encodeURIComponent(CONFIG.TITULO_AGENDA)}&dates=${z(ED)}/${z(fim)}&details=${encodeURIComponent(desc)}`;
+  $('[data-cal="google"]').href = ME.googleUrl(ED);
   const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Meu Patrimonio//Consultor dos Milhoes//PT', 'BEGIN:VEVENT',
     `UID:consultor-dos-milhoes-${z(ED)}@meupatrimonio.com`, `DTSTAMP:${z(new Date())}`, `DTSTART:${z(ED)}`, `DTEND:${z(fim)}`,
     `SUMMARY:${CONFIG.TITULO_AGENDA}`, `DESCRIPTION:${desc}`,
