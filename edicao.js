@@ -2,10 +2,10 @@
    DATA DA EDIÇÃO: o único arquivo que muda todo mês.
    Usado pela landing page (app.js) e pelo link fixo de agenda (/agenda/).
    Horário de Brasília (-03:00). Quando todas as datas passarem, vale a
-   regra padrão: última terça do mês, às 20h. */
+   regra padrão: última terça do mês, às 19h. */
 window.MP_EDICAO = (() => {
-  const EDICOES = ['2026-12-10T20:00:00-03:00'];
-  const REGRA_PADRAO = { diaDaSemana: 2 /* 0=dom, 2=terça */, hora: 20 };
+  const EDICOES = ['2026-12-10T19:00:00-03:00'];
+  const REGRA_PADRAO = { diaDaSemana: 2 /* 0=dom, 2=terça */, hora: 19 };
   const DURACAO_MIN = 90;
   const TITULO = 'Consultor dos Milhões · Aula ao vivo com Gabriel Liberato';
   const PAGINA = 'https://marketingmpi.github.io/LP-Consultor-dos-Milhoes/';
