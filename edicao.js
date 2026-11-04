@@ -8,7 +8,7 @@ window.MP_EDICAO = (() => {
   const REGRA_PADRAO = { diaDaSemana: 2 /* 0=dom, 2=terça */, hora: 19 };
   const DURACAO_MIN = 90;
   const TITULO = 'Consultor dos Milhões · Aula ao vivo com Gabriel Liberato';
-  const PAGINA = 'https://marketingmpi.github.io/LP-Consultor-dos-Milhoes/';
+  const PAGINA = 'https://consultordosmilhoes.meupatrimonio.com/';
   const DESCRICAO = 'Aula ao vivo e gratuita com Gabriel Liberato, para profissionais do mercado financeiro: como captar e reter clientes de milhões.\n\n'
     + 'O link da sala chega por e-mail e WhatsApp no dia do encontro.\n\n'
     + 'Página do evento: ' + PAGINA;

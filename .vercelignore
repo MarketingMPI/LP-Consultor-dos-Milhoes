@@ -1,0 +1,6 @@
+.git
+.nojekyll
+assets/img/consultor-dos-milhoes-original.png
+*.md
+.env*
+.vercel
