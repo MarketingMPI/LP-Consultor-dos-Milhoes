@@ -1,4 +1,4 @@
-/* ===== Encontro Clientes de Milhões · LP recorrente ===== */
+/* ===== Consultor dos Milhões · LP recorrente ===== */
 :root{
   --bg:#12100c;
   --bg-deep:#0b0a07;
@@ -157,11 +157,14 @@ button{font:inherit;color:inherit}
 }
 
 .hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(340px,.75fr);gap:clamp(36px,5vw,80px);align-items:center}
+.event-logo{margin:0 0 26px;line-height:0}
+.event-logo img{width:clamp(200px,22vw,300px);height:auto;filter:drop-shadow(0 10px 30px rgba(228,214,167,.18))}
+.form-aud{margin-top:10px;color:var(--ink-soft);font-size:.95rem;line-height:1.5}
 .kicker{display:inline-flex;align-items:center;gap:10px;font-size:.95rem;color:var(--ink-soft);
   padding:8px 16px 8px 14px;border-radius:999px;border:1px solid var(--line-soft);background:rgba(26,22,16,.55)}
 .hero-title{
   font-family:var(--serif);font-weight:400;font-variation-settings:"opsz" 144;
-  font-size:clamp(2.5rem,1.25rem + 4.2vw,4.6rem);line-height:1.04;letter-spacing:-.025em;
+  font-size:clamp(2.3rem,1.1rem + 3.8vw,4.2rem);line-height:1.04;letter-spacing:-.025em;
   margin:28px 0 0;text-wrap:balance;
 }
 .hero-title .line{display:block}
@@ -186,7 +189,7 @@ button{font:inherit;color:inherit}
 }
 
 .js [data-load]{opacity:0;transform:translateY(18px);transition:opacity .9s var(--ease-out),transform .9s var(--ease-out)}
-[data-load="1"]{transition-delay:.1s}[data-load="3"]{transition-delay:.85s}
+[data-load="1"]{transition-delay:.05s}[data-load="2"]{transition-delay:.2s}[data-load="3"]{transition-delay:.85s}
 [data-load="4"]{transition-delay:1.05s}[data-load="5"]{transition-delay:1.25s}
 .is-loaded [data-load]{opacity:1;transform:none}
 

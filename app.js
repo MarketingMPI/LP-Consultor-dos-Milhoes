@@ -1,4 +1,4 @@
-/* ===== Encontro Clientes de Milhões · app.js ===== */
+/* ===== Consultor dos Milhões · app.js ===== */
 (() => {
   'use strict';
 
@@ -13,7 +13,7 @@
     EDICOES: ['2026-11-24T20:00:00-03:00'],
     REGRA_PADRAO: { diaDaSemana: 2 /* 0=dom, 2=terça */, hora: 20 },
     DURACAO_MIN: 90,
-    TITULO_AGENDA: 'Encontro Clientes de Milhões · Aula ao vivo com Gabriel Liberato',
+    TITULO_AGENDA: 'Consultor dos Milhões · Aula ao vivo com Gabriel Liberato',
 
     /* Formulário ActiveCampaign. Enquanto formId = null, a página
        roda em MODO PRÉVIA: mostra a confirmação, mas não envia o lead. */
@@ -349,10 +349,10 @@
         fd.append('jsonp', 'true');
         await fetch(CONFIG.AC.action, { method: 'POST', mode: 'no-cors', body: fd });
       } else {
-        console.warn('[Encontro CM] MODO PRÉVIA: defina CONFIG.AC.formId em app.js para enviar os leads.');
+        console.warn('[Consultor dos Milhões] MODO PRÉVIA: defina CONFIG.AC.formId em app.js para enviar os leads.');
         await new Promise(r => setTimeout(r, 700));
       }
-      window.dataLayer && window.dataLayer.push({ event: 'generate_lead', form_name: 'encontro_clientes_milhoes', edicao: ED.toISOString().slice(0, 7) });
+      window.dataLayer && window.dataLayer.push({ event: 'generate_lead', form_name: 'consultor_dos_milhoes', edicao: ED.toISOString().slice(0, 7) });
       showSuccess();
     } catch (err) {
       status.textContent = 'Não foi possível enviar agora. Confira sua conexão e tente de novo.';
@@ -378,8 +378,8 @@
   const desc = 'Aula ao vivo e gratuita com Gabriel Liberato. O link da sala chega por e-mail e WhatsApp no dia do encontro.';
   $('[data-cal="google"]').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE'
     + `&text=${encodeURIComponent(CONFIG.TITULO_AGENDA)}&dates=${z(ED)}/${z(fim)}&details=${encodeURIComponent(desc)}`;
-  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Meu Patrimonio//Encontro CM//PT', 'BEGIN:VEVENT',
-    `UID:encontro-cm-${z(ED)}@meupatrimonio.com`, `DTSTAMP:${z(new Date())}`, `DTSTART:${z(ED)}`, `DTEND:${z(fim)}`,
+  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Meu Patrimonio//Consultor dos Milhoes//PT', 'BEGIN:VEVENT',
+    `UID:consultor-dos-milhoes-${z(ED)}@meupatrimonio.com`, `DTSTAMP:${z(new Date())}`, `DTSTART:${z(ED)}`, `DTEND:${z(fim)}`,
     `SUMMARY:${CONFIG.TITULO_AGENDA}`, `DESCRIPTION:${desc}`,
     'BEGIN:VALARM', 'TRIGGER:-PT30M', 'ACTION:DISPLAY', 'DESCRIPTION:O encontro começa em 30 minutos', 'END:VALARM',
     'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
