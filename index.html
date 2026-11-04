@@ -25,7 +25,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Serif:ital,opsz,wght@0,8..144,300..600;1,8..144,300..500&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 </head>
 <body>
 <!-- Google Tag Manager (noscript) -->
@@ -113,10 +113,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <small class="field-error" aria-live="polite"></small>
           </div>
 
-          <!-- UTMs preenchidas pelo app.js -->
-          <input type="hidden" name="utm_source"><input type="hidden" name="utm_medium">
-          <input type="hidden" name="utm_campaign"><input type="hidden" name="utm_content">
-          <input type="hidden" name="utm_term">
+          <fieldset class="field field-choice">
+            <legend>Atua no mercado financeiro?</legend>
+            <div class="choice-row">
+              <label class="choice"><input type="radio" name="field[37]" value="Sim" required><span>Sim</span></label>
+              <label class="choice"><input type="radio" name="field[37]" value="Não"><span>Não</span></label>
+            </div>
+            <small class="field-error" aria-live="polite"></small>
+          </fieldset>
+
+          <!-- ActiveCampaign form 47 · UTMs preenchidas pelo app.js -->
+          <input type="hidden" name="field[29]" data-utm="utm_source">
+          <input type="hidden" name="field[30]" data-utm="utm_medium">
+          <input type="hidden" name="field[31]" data-utm="utm_campaign">
+          <input type="hidden" name="field[32]" data-utm="utm_term">
+          <input type="hidden" name="field[33]" data-utm="utm_content">
+          <input type="hidden" name="field[35]" data-utm="utm_id">
 
           <button class="btn btn-gold btn-block" type="submit" data-cta="form">
             <span class="btn-label">Quero garantir minha vaga</span>
@@ -422,6 +434,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <a class="btn btn-gold btn-sm" href="#inscricao" tabindex="-1" data-cta="sticky">Garantir vaga</a>
 </div>
 
-<script src="app.js?v=3"></script>
+<script src="app.js?v=4"></script>
 </body>
 </html>

@@ -19,8 +19,8 @@
        roda em MODO PRÉVIA: mostra a confirmação, mas não envia o lead. */
     AC: {
       action: 'https://mpinvestimentos.activehosted.com/proc.php',
-      formId: null,       // ex.: 45
-      or: ''              // valor do campo oculto "or" do embed
+      formId: 47,
+      or: '38aee529-78e7-496f-8a6b-d8dac2ec1ea9'
     }
   };
 
@@ -297,9 +297,7 @@
 
   // UTMs da URL para os campos ocultos
   const qs = new URLSearchParams(location.search);
-  ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach(k => {
-    const el = form.elements[k]; if (el && qs.get(k)) el.value = qs.get(k);
-  });
+  $$('input[data-utm]', form).forEach(el => { const v = qs.get(el.dataset.utm); if (v) el.value = v; });
 
   // máscara de WhatsApp: (27) 99999-9999
   whats.addEventListener('input', () => {
@@ -315,6 +313,7 @@
     phone: v => v.replace(/\D/g, '').length >= 10 || 'Digite o WhatsApp com DDD.',
     email: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) || 'Digite um e-mail válido.'
   };
+  rules['field[37]'] = () => !!form.querySelector('input[name="field[37]"]:checked') || 'Escolha uma opção.';
   function validate(input) {
     const res = rules[input.name](input.value);
     const field = input.closest('.field');
@@ -326,6 +325,10 @@
     return ok;
   }
   $$('input[required]', form).forEach(i => {
+    if (i.type === 'radio') {
+      $$('input[type="radio"]', form).filter(r => r.name === i.name).forEach(r => r.addEventListener('change', () => validate(i)));
+      return;
+    }
     i.addEventListener('blur', () => { if (i.value) validate(i); });
     i.addEventListener('input', () => { if (i.closest('.field').classList.contains('has-error')) validate(i); });
   });
@@ -342,12 +345,7 @@
 
     try {
       if (CONFIG.AC.formId) {
-        const fd = new FormData(form);
-        const id = String(CONFIG.AC.formId);
-        fd.append('u', id); fd.append('f', id); fd.append('s', ''); fd.append('c', '0'); fd.append('m', '0');
-        fd.append('act', 'sub'); fd.append('v', '2'); if (CONFIG.AC.or) fd.append('or', CONFIG.AC.or);
-        fd.append('jsonp', 'true');
-        await fetch(CONFIG.AC.action, { method: 'POST', mode: 'no-cors', body: fd });
+        await sendToAC();
       } else {
         console.warn('[Consultor dos Milhões] MODO PRÉVIA: defina CONFIG.AC.formId em app.js para enviar os leads.');
         await new Promise(r => setTimeout(r, 700));
@@ -355,12 +353,53 @@
       window.dataLayer && window.dataLayer.push({ event: 'generate_lead', form_name: 'consultor_dos_milhoes', edicao: ED.toISOString().slice(0, 7) });
       showSuccess();
     } catch (err) {
-      status.textContent = 'Não foi possível enviar agora. Confira sua conexão e tente de novo.';
+      status.textContent = (err && err.userMessage) || 'Não foi possível enviar agora. Confira sua conexão e tente de novo.';
       btn.disabled = false;
     } finally {
       form.classList.remove('is-sending');
     }
   });
+
+  /* Envio igual ao embed oficial da ActiveCampaign (JSONP via <script>):
+     o servidor responde chamando _show_thank_you ou _show_error. */
+  function acPhone(v) {
+    const d = v.replace(/\D/g, '');
+    return d.startsWith('55') && d.length > 11 ? '+' + d : '+55' + d;
+  }
+  function sendToAC() {
+    return new Promise((resolve, reject) => {
+      const id = String(CONFIG.AC.formId);
+      const p = new URLSearchParams();
+      [['u', id], ['f', id], ['s', ''], ['c', '0'], ['m', '0'], ['act', 'sub'], ['v', '2'], ['or', CONFIG.AC.or]]
+        .forEach(([k, v]) => p.append(k, v));
+      p.append('fullname', form.elements.fullname.value.trim());
+      p.append('phone', acPhone(form.elements.phone.value));
+      p.append('email', form.elements.email.value.trim());
+      const atua = form.querySelector('input[name="field[37]"]:checked');
+      p.append('field[37]', atua ? atua.value : '');
+      $$('input[data-utm]', form).forEach(el => p.append(el.name, el.value));
+      p.append('jsonp', 'true');
+
+      let done = false, timer;
+      const finish = (fn, arg) => { if (done) return; done = true; clearTimeout(timer); fn(arg); };
+      const fail = msg => { const e = new Error(msg); e.userMessage = msg; return e; };
+      window._show_thank_you = () => finish(resolve);
+      window._show_unsubscribe = () => finish(resolve);
+      window._show_error = (fid, message) => {
+        const tmp = document.createElement('div'); tmp.innerHTML = message || '';
+        finish(reject, fail(tmp.textContent.trim() || 'Não foi possível concluir sua inscrição. Tente de novo.'));
+      };
+      window._show_field_error = (fid, field, message) => finish(reject, fail(message || 'Confira os dados e tente de novo.'));
+      window._load_script = src => { const sc = document.createElement('script'); sc.src = src; document.head.appendChild(sc); };
+      window._form_callback = window._form_callback || function () {};
+
+      const sc = document.createElement('script');
+      sc.src = CONFIG.AC.action + '?' + p.toString();
+      sc.onerror = () => finish(reject, fail('Não foi possível enviar agora. Confira sua conexão e tente de novo.'));
+      timer = setTimeout(() => finish(reject, fail('O envio demorou demais. Tente de novo.')), 15000);
+      document.head.appendChild(sc);
+    });
+  }
 
   function showSuccess() {
     const ok = $('.form-success', card);
