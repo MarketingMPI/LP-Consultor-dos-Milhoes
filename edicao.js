@@ -9,8 +9,11 @@ window.MP_EDICAO = (() => {
   const DURACAO_MIN = 90;
   const TITULO = 'Consultor dos Milhões · Aula ao vivo com Gabriel Liberato';
   const PAGINA = 'https://consultordosmilhoes.meupatrimonio.com/';
+  // Link da transmissão da edição (troque junto com a data, todo mês)
+  const LINK_TRANSMISSAO = 'https://www.youtube.com/live/DhHQP6U_QH8';
   const DESCRICAO = 'Aula ao vivo e gratuita com Gabriel Liberato, para profissionais do mercado financeiro: como captar e reter clientes de milhões.\n\n'
-    + 'O link da sala chega por e-mail e WhatsApp no dia do encontro.\n\n'
+    + 'Link da transmissão ao vivo (YouTube):\n' + LINK_TRANSMISSAO + '\n\n'
+    + 'Entre alguns minutos antes para não perder o começo.\n\n'
     + 'Página do evento: ' + PAGINA;
 
   function regraPadrao(from) {
@@ -36,7 +39,7 @@ window.MP_EDICAO = (() => {
       + '&dates=' + z(inicio) + '/' + z(fim)
       + '&ctz=America/Sao_Paulo'
       + '&details=' + encodeURIComponent(DESCRICAO)
-      + '&location=' + encodeURIComponent('Online, ao vivo (link enviado por e-mail e WhatsApp)');
+      + '&location=' + encodeURIComponent(LINK_TRANSMISSAO);
   }
-  return { EDICOES, REGRA_PADRAO, DURACAO_MIN, TITULO, DESCRICAO, PAGINA, proxima, googleUrl, z };
+  return { EDICOES, REGRA_PADRAO, DURACAO_MIN, TITULO, DESCRICAO, PAGINA, LINK_TRANSMISSAO, proxima, googleUrl, z };
 })();

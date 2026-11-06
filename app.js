@@ -389,11 +389,11 @@
   /* ---------- Links de agenda ---------- */
   const fim = new Date(ED.getTime() + CONFIG.DURACAO_MIN * 60000);
   const z = d => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
-  const desc = 'Aula ao vivo e gratuita com Gabriel Liberato. O link da sala chega por e-mail e WhatsApp no dia do encontro.';
+  const desc = ME.DESCRICAO.replace(/\n/g, '\\n');
   $('[data-cal="google"]').href = ME.googleUrl(ED);
   const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Meu Patrimonio//Consultor dos Milhoes//PT', 'BEGIN:VEVENT',
     `UID:consultor-dos-milhoes-${z(ED)}@meupatrimonio.com`, `DTSTAMP:${z(new Date())}`, `DTSTART:${z(ED)}`, `DTEND:${z(fim)}`,
-    `SUMMARY:${CONFIG.TITULO_AGENDA}`, `DESCRIPTION:${desc}`,
+    `SUMMARY:${CONFIG.TITULO_AGENDA}`, `DESCRIPTION:${desc}`, `LOCATION:${ME.LINK_TRANSMISSAO}`, `URL:${ME.LINK_TRANSMISSAO}`,
     'BEGIN:VALARM', 'TRIGGER:-PT30M', 'ACTION:DISPLAY', 'DESCRIPTION:O encontro começa em 30 minutos', 'END:VALARM',
     'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
   $('[data-cal="ics"]').href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(ics);
